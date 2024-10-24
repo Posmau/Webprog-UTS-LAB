@@ -776,3 +776,14 @@ tr:hover {
     padding-bottom: 1rem;
     margin-bottom: 1.5rem;
 }
+
+.forgot-password-link {
+    display: block;
+    margin-top: 1rem;
+    color: #1877f2;
+    text-decoration: none;
+}
+
+.forgot-password-link:hover {
+    text-decoration: underline;
+}

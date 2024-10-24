@@ -18,7 +18,7 @@
             </div>
         </main>
         <footer>
-            <p>&copy; 2024 Todolist Inc. All rights reserved.</p>
+            <p>&copy; 2024 ToDoMaster Inc. All rights reserved.</p>
         </footer>
     </div>
 </body>

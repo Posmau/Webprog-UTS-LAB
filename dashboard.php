@@ -154,6 +154,9 @@ $stats = $stmt->fetch();
 
         <div class="dashboard-footer">
             <a href="login.php?action=logout" class="btn btn-logout">Logout</a>
+            <div>
+            <a href="index.php" class="back-btn">Kembali ke Home</a>
+            </div>
         </div>
     </div>
 </body>
