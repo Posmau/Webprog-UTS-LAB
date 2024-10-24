@@ -10,78 +10,104 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 $success_message = $error_message = '';
 
-// Handle to-do item deletion
+// Handle adding new list
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_list'])) {
+    $title = htmlspecialchars($_POST['title']);
+    $description = htmlspecialchars($_POST['description'] ?? '');
+    
+    try {
+        $pdo->beginTransaction();
+        
+        // Insert the new list
+        $stmt = $pdo->prepare("INSERT INTO to_do_lists (user_id, title, description, status) VALUES (?, ?, ?, 'incomplete')");
+        $stmt->execute([$user_id, $title, $description]);
+        
+        $pdo->commit();
+        $success_message = "List added successfully!";
+    } catch (PDOException $e) {
+        $pdo->rollBack();
+        $error_message = "Error adding list: " . $e->getMessage();
+    }
+}
+
+// Handle task deletion
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_task'])) {
     $task_id = (int)$_POST['task_id'];
     
     try {
         $pdo->beginTransaction();
         
-        // Delete task
-        $stmt = $pdo->prepare("DELETE FROM to_do_lists WHERE id = ? AND user_id = ?");
-        $stmt->execute([$task_id, $user_id]);
+        // Verify ownership before deletion
+        $stmt = $pdo->prepare("SELECT user_id FROM to_do_lists WHERE id = ?");
+        $stmt->execute([$task_id]);
+        $task = $stmt->fetch();
         
-        $pdo->commit();
-        $success_message = "Task deleted successfully!";
+        if ($task && $task['user_id'] == $user_id) {
+            $stmt = $pdo->prepare("DELETE FROM to_do_lists WHERE id = ?");
+            $stmt->execute([$task_id]);
+            
+            $pdo->commit();
+            $success_message = "Task deleted successfully!";
+        } else {
+            $error_message = "Unauthorized action";
+        }
     } catch (PDOException $e) {
         $pdo->rollBack();
         $error_message = "Error deleting task: " . $e->getMessage();
     }
 }
 
-// Handle marking task as complete
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['complete_task'])) {
+// Handle marking task as complete/incomplete
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && (isset($_POST['complete_task']) || isset($_POST['incomplete_task']))) {
     $task_id = (int)$_POST['task_id'];
+    $new_status = isset($_POST['complete_task']) ? 'complete' : 'incomplete';
     
     try {
         $pdo->beginTransaction();
         
-        // Update task status to 'complete'
-        $stmt = $pdo->prepare("UPDATE to_do_lists SET status = 'complete' WHERE id = ? AND user_id = ?");
-        $stmt->execute([$task_id, $user_id]);
+        // Verify ownership before updating
+        $stmt = $pdo->prepare("SELECT user_id FROM to_do_lists WHERE id = ?");
+        $stmt->execute([$task_id]);
+        $task = $stmt->fetch();
         
-        $pdo->commit();
-        $success_message = "Task marked as complete!";
+        if ($task && $task['user_id'] == $user_id) {
+            $stmt = $pdo->prepare("UPDATE to_do_lists SET status = ? WHERE id = ?");
+            $stmt->execute([$new_status, $task_id]);
+            
+            $pdo->commit();
+            $success_message = "Task marked as " . $new_status . "!";
+        } else {
+            $error_message = "Unauthorized action";
+        }
     } catch (PDOException $e) {
         $pdo->rollBack();
-        $error_message = "Error marking task as complete: " . $e->getMessage();
-    }
-}
-
-// Handle marking task as incomplete
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['incomplete_task'])) {
-    $task_id = (int)$_POST['task_id'];
-    
-    try {
-        $pdo->beginTransaction();
-        
-        // Update task status to 'incomplete'
-        $stmt = $pdo->prepare("UPDATE to_do_lists SET status = 'incomplete' WHERE id = ? AND user_id = ?");
-        $stmt->execute([$task_id, $user_id]);
-        
-        $pdo->commit();
-        $success_message = "Task marked as incomplete!";
-    } catch (PDOException $e) {
-        $pdo->rollBack();
-        $error_message = "Error marking task as incomplete: " . $e->getMessage();
+        $error_message = "Error updating task status: " . $e->getMessage();
     }
 }
 
 // Handle task editing
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_task'])) {
     $task_id = (int)$_POST['task_id'];
-    $title = $_POST['title'];
-    $description = $_POST['description'];
+    $title = htmlspecialchars($_POST['title']);
+    $description = htmlspecialchars($_POST['description']);
     
     try {
         $pdo->beginTransaction();
         
-        // Update task details
-        $stmt = $pdo->prepare("UPDATE to_do_lists SET title = ?, description = ? WHERE id = ? AND user_id = ?");
-        $stmt->execute([$title, $description, $task_id, $user_id]);
+        // Verify ownership before updating
+        $stmt = $pdo->prepare("SELECT user_id FROM to_do_lists WHERE id = ?");
+        $stmt->execute([$task_id]);
+        $task = $stmt->fetch();
         
-        $pdo->commit();
-        $success_message = "Task updated successfully!";
+        if ($task && $task['user_id'] == $user_id) {
+            $stmt = $pdo->prepare("UPDATE to_do_lists SET title = ?, description = ? WHERE id = ?");
+            $stmt->execute([$title, $description, $task_id]);
+            
+            $pdo->commit();
+            $success_message = "Task updated successfully!";
+        } else {
+            $error_message = "Unauthorized action";
+        }
     } catch (PDOException $e) {
         $pdo->rollBack();
         $error_message = "Error updating task: " . $e->getMessage();
@@ -112,6 +138,16 @@ $to_do_lists = $stmt->fetchAll();
     <div class="container">
         <h2>My To-Do Lists</h2>
         
+        <!-- Add New List Form -->
+        <div class="add-list-form">
+            <h3>Add New List</h3>
+            <form method="POST">
+                <input type="text" name="title" placeholder="List Title" required>
+                <textarea name="description" placeholder="Description"></textarea>
+                <button type="submit" name="add_list">Add List</button>
+            </form>
+        </div>
+        
         <?php if ($success_message): ?>
             <p class="success"><?php echo $success_message; ?></p>
         <?php endif; ?>
@@ -123,24 +159,24 @@ $to_do_lists = $stmt->fetchAll();
             <p>You don't have any tasks yet.</p>
         <?php else: ?>
             <?php foreach ($to_do_lists as $task): ?>
-                <div class="task">
+                <div class="task <?php echo $task['status']; ?>">
                     <h4><?php echo htmlspecialchars($task['title'], ENT_QUOTES, 'UTF-8'); ?></h4>
                     <p>Description: <?php echo htmlspecialchars($task['description'], ENT_QUOTES, 'UTF-8'); ?></p>
                     <p>Status: <?php echo htmlspecialchars($task['status'], ENT_QUOTES, 'UTF-8'); ?></p>
                     
-                    <form method="post" action="">
+                    <form method="post">
                         <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
                         <?php if ($task['status'] == 'incomplete'): ?>
                             <button type="submit" name="complete_task">Mark as Complete</button>
                         <?php else: ?>
-                            <button type="submit" name="incomplete_task">Unmark Completion</button>
+                            <button type="submit" name="incomplete_task">Mark as Incomplete</button>
                         <?php endif; ?>
                         <button type="button" onclick="showEditForm(<?php echo $task['id']; ?>)">Edit</button>
                         <button type="submit" name="delete_task" onclick="return confirm('Are you sure you want to delete this task?')">Delete Task</button>
                     </form>
 
-                    <div id="edit-form-<?php echo $task['id']; ?>" style="display: none;">
-                        <form method="post" action="">
+                    <div id="edit-form-<?php echo $task['id']; ?>" class="edit-form" style="display: none;">
+                        <form method="post">
                             <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
                             <input type="text" name="title" value="<?php echo htmlspecialchars($task['title'], ENT_QUOTES, 'UTF-8'); ?>" required>
                             <textarea name="description" required><?php echo htmlspecialchars($task['description'], ENT_QUOTES, 'UTF-8'); ?></textarea>
