@@ -9,13 +9,23 @@ if (!isset($_SESSION['user_id'])) {
 
 // Get sort parameter from URL, default to 'all'
 $sort = isset($_GET['sort']) ? $_GET['sort'] : 'all';
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
 
 $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->execute([$_SESSION['user_id']]);
 $user = $stmt->fetch();
 
-// Modify query based on sort parameter
+// Modify query based on sort parameter and search term
 $query = "SELECT * FROM to_do_lists WHERE user_id = ?";
+$params = [$_SESSION['user_id']];
+
+if (!empty($search)) {
+    $query .= " AND (title LIKE ? OR description LIKE ?)";
+    $searchParam = "%{$search}%";
+    $params[] = $searchParam;
+    $params[] = $searchParam;
+}
+
 if ($sort === 'complete') {
     $query .= " AND status = 'complete'";
 } elseif ($sort === 'incomplete') {
@@ -24,7 +34,7 @@ if ($sort === 'complete') {
 $query .= " ORDER BY id DESC";
 
 $stmt = $pdo->prepare($query);
-$stmt->execute([$_SESSION['user_id']]);
+$stmt->execute($params);
 $lists = $stmt->fetchAll();
 
 // Get counts for different statuses
@@ -54,19 +64,19 @@ $stats = $stmt->fetch();
         <div class="dashboard-summary">
             <div class="stats">
                 <div class="stat-card <?= $sort === 'all' ? 'active' : '' ?>">
-                    <a href="?sort=all" class="stat-link">
+                    <a href="?sort=all<?= !empty($search) ? '&search=' . urlencode($search) : '' ?>" class="stat-link">
                         <h3>Total Lists</h3>
                         <p><?= $stats['total'] ?></p>
                     </a>
                 </div>
                 <div class="stat-card <?= $sort === 'complete' ? 'active' : '' ?>">
-                    <a href="?sort=complete" class="stat-link">
+                    <a href="?sort=complete<?= !empty($search) ? '&search=' . urlencode($search) : '' ?>" class="stat-link">
                         <h3>Completed</h3>
                         <p><?= $stats['completed'] ?></p>
                     </a>
                 </div>
                 <div class="stat-card <?= $sort === 'incomplete' ? 'active' : '' ?>">
-                    <a href="?sort=incomplete" class="stat-link">
+                    <a href="?sort=incomplete<?= !empty($search) ? '&search=' . urlencode($search) : '' ?>" class="stat-link">
                         <h3>Incomplete</h3>
                         <p><?= $stats['incomplete'] ?></p>
                     </a>
@@ -77,20 +87,39 @@ $stats = $stmt->fetch();
         <div class="todo-lists">
             <div class="list-header">
                 <h2>Your Todo Lists</h2>
-                <div class="sort-controls">
-                    <label for="sort-select">Sort by:</label>
-                    <select id="sort-select" onchange="window.location.href=this.value">
-                        <option value="?sort=all" <?= $sort === 'all' ? 'selected' : '' ?>>All Lists</option>
-                        <option value="?sort=complete" <?= $sort === 'complete' ? 'selected' : '' ?>>Completed</option>
-                        <option value="?sort=incomplete" <?= $sort === 'incomplete' ? 'selected' : '' ?>>Incomplete</option>
-                    </select>
+                <div class="search-sort-controls">
+                    <form method="GET" class="search-form">
+                        <input type="text" 
+                               name="search" 
+                               placeholder="Search lists..." 
+                               value="<?= htmlspecialchars($search) ?>"
+                               class="search-input">
+                        <input type="hidden" name="sort" value="<?= htmlspecialchars($sort) ?>">
+                        <button type="submit" class="search-button">Search</button>
+                        <?php if (!empty($search)): ?>
+                            <a href="?sort=<?= htmlspecialchars($sort) ?>" class="clear-search">Clear</a>
+                        <?php endif; ?>
+                    </form>
+                    <div class="sort-controls">
+                        <label for="sort-select">Sort by:</label>
+                        <select id="sort-select" onchange="window.location.href=this.value">
+                            <option value="?sort=all<?= !empty($search) ? '&search=' . urlencode($search) : '' ?>" 
+                                    <?= $sort === 'all' ? 'selected' : '' ?>>All Lists</option>
+                            <option value="?sort=complete<?= !empty($search) ? '&search=' . urlencode($search) : '' ?>" 
+                                    <?= $sort === 'complete' ? 'selected' : '' ?>>Completed</option>
+                            <option value="?sort=incomplete<?= !empty($search) ? '&search=' . urlencode($search) : '' ?>" 
+                                    <?= $sort === 'incomplete' ? 'selected' : '' ?>>Incomplete</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             
             <?php if (empty($lists)): ?>
                 <p class="no-lists">
                     <?php
-                    if ($sort === 'complete') {
+                    if (!empty($search)) {
+                        echo "No lists found matching '" . htmlspecialchars($search) . "'";
+                    } elseif ($sort === 'complete') {
                         echo "No completed lists found.";
                     } elseif ($sort === 'incomplete') {
                         echo "No incomplete lists found.";

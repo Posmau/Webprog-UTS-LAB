@@ -712,3 +712,67 @@ tr:hover {
         display: none; /* Hide logo text on mobile */
     }
 }
+
+/* Search functionality styles */
+.search-sort-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.search-form {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.search-input {
+    flex: 1;
+    min-width: 200px;
+    padding: 0.5rem;
+    border: 1px solid #dddfe2;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.search-button {
+    padding: 0.5rem 1rem;
+    background-color: #1877f2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.clear-search {
+    color: #65676B;
+    text-decoration: none;
+    padding: 0.5rem;
+}
+
+.clear-search:hover {
+    text-decoration: underline;
+}
+
+/* Profile page styles */
+.profile-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.profile-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profile-section h3 {
+    margin-top: 0;
+    color: #1877f2;
+    border-bottom: 1px solid #dddfe2;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+}
