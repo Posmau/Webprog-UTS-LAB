@@ -499,6 +499,69 @@ th {
     background-color: #f0f2f5;
 }
 
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .navbar-links {
+        flex-direction: column;
+        width: 100%;
+        gap: 5px;
+        display: none; /* Initially hidden for a smaller screen */
+    }
+
+    .navbar.active .navbar-links {
+        display: flex;
+    }
+
+    .navbar-toggle {
+        display: block;
+        background: #1877f2;
+        border: none;
+        color: #fff;
+        font-size: 24px;
+        cursor: pointer;
+    }
+}
+
+@media (min-width: 769px) {
+    .navbar-toggle {
+        display: none; /* Hide toggle on larger screens */
+    }
+}
+
+.menu-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    z-index: 9;
+    display: none; /* Hidden by default */
+}
+
+/* Show overlay and menu links when navbar is active */
+.navbar.active .menu-navbar {
+    display: block;
+}
+
+.navbar.active .navbar-links {
+    display: flex;
+    flex-direction: column;
+    background-color: #333;
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 250px;
+    z-index: 10;
+    transform: translateX(0);
+}
+
 /* Filter form styles */
 .filter-form {
     margin-bottom: 2rem;
