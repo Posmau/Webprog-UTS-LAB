@@ -13,6 +13,7 @@ if (!isset($_SESSION['user_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us - Division Defence Expo 2024</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <?php include 'navbar.php'; ?>
@@ -43,7 +44,45 @@ if (!isset($_SESSION['user_id'])) {
             <p>Address: 456 Productivity Avenue, Task City, TC 67890</p>
         </div>
         <a href="dashboard.php" class="back-btn">Kembali ke Main Page</a>
+        <!-- Tombol Scroll ke Atas -->
+        <button id="scrollTopBtn" title="Kembali ke atas">
+            <i class="fa-solid fa-arrow-up" style="color: #74C0FC;"></i>
+        </button>
     </div>
 </div>
+
+        <!-- Script JavaScript -->
+    <script>
+        
+        // Fungsi untuk Tombol Scroll ke Atas
+        window.onscroll = function() {scrollFunction()};
+
+        function scrollFunction() {
+            const scrollTopBtn = document.getElementById("scrollTopBtn");
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                scrollTopBtn.style.display = "block";
+            } else {
+                scrollTopBtn.style.display = "none";
+            }
+        }
+
+        document.getElementById('scrollTopBtn').addEventListener('click', function(){
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Cek preferensi mode saat halaman dimuat
+        window.addEventListener('load', function() {
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.body.classList.add('dark-mode');
+                toggleDarkModeBtn.textContent = 'Light Mode';
+            }
+        });
+
+        function showEditProfile() {
+            var form = document.getElementById('edit-profile-form');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+</script>
 </body>
 </html>

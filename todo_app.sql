@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 24, 2024 at 07:21 PM
+-- Generation Time: Oct 25, 2024 at 12:39 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -35,6 +35,18 @@ CREATE TABLE `to_do_lists` (
   `status` enum('incomplete','complete') DEFAULT 'incomplete'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `to_do_lists`
+--
+
+INSERT INTO `to_do_lists` (`id`, `user_id`, `title`, `description`, `status`) VALUES
+(3, 11, '123', '123', 'complete'),
+(4, 11, 'Belanja', 'Belanja Di Indomaret', 'incomplete'),
+(5, 12, '123', '123', 'incomplete'),
+(6, 12, '234', '234', 'incomplete'),
+(7, 12, '345', '345', 'incomplete'),
+(8, 12, '123', '123', 'complete');
+
 -- --------------------------------------------------------
 
 --
@@ -59,7 +71,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `recovery_question`, `recovery_answer`, `recovery_question_2`, `recovery_answer_2`, `failed_login_attempts`, `lockout_time`) VALUES
-(9, '123', '123@123.com', '$2y$10$3qqi13FhnO6BbpQkp23tZuuwLTcEUst85YrMScfUDkppyeCieJIMG', 'Siapa nama gadis ibu Anda?', '$2y$10$E6tujdn2mKE.NNZVytcYneHaBMrnSBOrh4LWdH0nDKDWYLA2E3oVi', 'Apa warna favorit Anda?', '$2y$10$oUf.FenbM.JDHaoN1r7Bm.OGhHUkIPDtCCiPNrAYv3YR3/CLt9rji', 0, NULL);
+(11, '345', '345@345.com', '$2y$10$5Z.zUhor04o8.pah5My94eefokVIqKxlsQjIsWABBoTRFs7rl6/ta', 'Siapa nama gadis ibu Anda?', '$2y$10$8aPl9zlLt61ej9ixKWrMNOOlpPb1RU3t0a5JGtxJp.2xbtSZppCLO', 'Apa warna favorit Anda?', '$2y$10$rO3OQf3EDE5SJkfPwsCXde13NAoZQnfxekJMAxYHbIBz0E0u0HXrm', 0, NULL),
+(12, '123', '123@123.com', '$2y$10$bGULfDSPtSQW0Zfth8QareD68XNMliN5aY5u9WVCxXRPVfeUm0BuO', 'Siapa nama gadis ibu Anda?', '$2y$10$CMnPFyeiT2MDIYfZq3VT9OclocDreuOSUaJctmaKLIGWSYHnkuplO', 'Apa warna favorit Anda?', '$2y$10$wejYXRyDVRUd6E0O8kyU6.IxIQt39LW55pKcCYTqtj.A4ogEn39W.', 0, NULL);
 
 --
 -- Indexes for dumped tables
@@ -87,13 +100,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `to_do_lists`
 --
 ALTER TABLE `to_do_lists`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Constraints for dumped tables
