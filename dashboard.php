@@ -189,29 +189,6 @@ $stats = $stmt->fetch();
         document.getElementById('scrollTopBtn').addEventListener('click', function(){
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
-
-        // Fungsi untuk Mode Gelap
-        const toggleDarkModeBtn = document.getElementById('toggleDarkMode');
-        toggleDarkModeBtn.addEventListener('click', function() {
-            document.body.classList.toggle('dark-mode');
-
-            // Simpan preferensi mode di localStorage
-            if (document.body.classList.contains('dark-mode')) {
-                localStorage.setItem('darkMode', 'enabled');
-                toggleDarkModeBtn.textContent = 'Light Mode';
-            } else {
-                localStorage.setItem('darkMode', 'disabled');
-                toggleDarkModeBtn.textContent = 'Dark Mode';
-            }
-        });
-
-        // Cek preferensi mode saat halaman dimuat
-        window.addEventListener('load', function() {
-            if (localStorage.getItem('darkMode') === 'enabled') {
-                document.body.classList.add('dark-mode');
-                toggleDarkModeBtn.textContent = 'Light Mode';
-            }
-        });
     </script>
             </div>
         </div>
