@@ -134,7 +134,9 @@ $to_do_lists = $stmt->fetchAll();
 </head>
 <body>
     <?php include 'navbar.php'; ?>
-    
+
+    <!-- Header dengan Efek Parallax -->
+    <div class="header">
     <div class="container">
         <h2>My To-Do Lists</h2>
         
@@ -186,9 +188,26 @@ $to_do_lists = $stmt->fetchAll();
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>
+        <a href="dashboard.php" class="back-btn">Kembali ke Main Page</a>
+    </div>
     </div>
 
     <script>
+        // Fungsi untuk Mode Gelap
+        const toggleDarkModeBtn = document.getElementById('toggleDarkMode');
+            toggleDarkModeBtn.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+
+            // Simpan preferensi mode di localStorage
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+                toggleDarkModeBtn.textContent = 'Light Mode';
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+                toggleDarkModeBtn.textContent = 'Dark Mode';
+            }
+        });
+
         function showEditForm(taskId) {
             var form = document.getElementById('edit-form-' + taskId);
             form.style.display = form.style.display === 'none' ? 'block' : 'none';

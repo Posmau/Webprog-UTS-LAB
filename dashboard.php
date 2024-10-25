@@ -54,10 +54,17 @@ $stats = $stmt->fetch();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo List Maker</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Tambahkan meta tags untuk SEO -->
+    <meta name="description" content="ToDoMaster adalah platform untuk mengelola tugas harian Anda dengan mudah dan efisien.">
+    <meta name="keywords" content="ToDo, Task Manager, Productivity, Todo List">
+    <meta name="author" content="Nama Anda">
 </head>
 <body>
     <?php include 'navbar.php'; ?>
     
+    <!-- Header dengan Efek Parallax -->
+    <div class="header">
     <div class="container">
         <h1>Welcome, <?= htmlspecialchars($user['username']); ?>!</h1>
 
@@ -82,7 +89,6 @@ $stats = $stmt->fetch();
                     </a>
                 </div>
             </div>
-        </div>
 
         <div class="todo-lists">
             <div class="list-header">
@@ -90,10 +96,10 @@ $stats = $stmt->fetch();
                 <div class="search-sort-controls">
                     <form method="GET" class="search-form">
                         <input type="text" 
-                               name="search" 
-                               placeholder="Search lists..." 
-                               value="<?= htmlspecialchars($search) ?>"
-                               class="search-input">
+                                name="search" 
+                                placeholder="Search lists..." 
+                                value="<?= htmlspecialchars($search) ?>"
+                                class="search-input">
                         <input type="hidden" name="sort" value="<?= htmlspecialchars($sort) ?>">
                         <button type="submit" class="search-button">Search</button>
                         <?php if (!empty($search)): ?>
@@ -147,13 +153,67 @@ $stats = $stmt->fetch();
                 </div>
             <?php endif; ?>
 
-            <div class="add-list-section">
-                <a href="list.php" class="btn btn-primary">Create New List</a>
+            <!-- Contoh Tooltip pada tombol -->
+    <div class="add-list-section">
+            <a href="list.php" class="btn btn-primary tooltip">Create New List
+                <span class="tooltiptext">Buat daftar tugas baru</span>
+            </a>
             </div>
         </div>
 
         <div class="dashboard-footer">
             <a href="login.php?action=logout" class="btn btn-logout">Logout</a>
+            <div>
+            <a href="index.php" class="back-btn">Kembali ke Home</a>
+            </div>
+            <!-- Tombol Scroll ke Atas -->
+        <button id="scrollTopBtn" title="Kembali ke atas">
+            <i class="fa-solid fa-arrow-up" style="color: #74C0FC;"></i>
+        </button>
+
+
+            <!-- Script JavaScript -->
+    <script>
+        // Fungsi untuk Tombol Scroll ke Atas
+        window.onscroll = function() {scrollFunction()};
+
+        function scrollFunction() {
+            const scrollTopBtn = document.getElementById("scrollTopBtn");
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                scrollTopBtn.style.display = "block";
+            } else {
+                scrollTopBtn.style.display = "none";
+            }
+        }
+
+        document.getElementById('scrollTopBtn').addEventListener('click', function(){
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Fungsi untuk Mode Gelap
+        const toggleDarkModeBtn = document.getElementById('toggleDarkMode');
+        toggleDarkModeBtn.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+
+            // Simpan preferensi mode di localStorage
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+                toggleDarkModeBtn.textContent = 'Light Mode';
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+                toggleDarkModeBtn.textContent = 'Dark Mode';
+            }
+        });
+
+        // Cek preferensi mode saat halaman dimuat
+        window.addEventListener('load', function() {
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.body.classList.add('dark-mode');
+                toggleDarkModeBtn.textContent = 'Light Mode';
+            }
+        });
+    </script>
+            </div>
         </div>
     </div>
 </body>

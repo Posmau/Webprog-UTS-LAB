@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Header dengan Efek Parallax -->
+    <div class="header">
     <div class="container">
         <header>
             <h1>Welcome to Todo List Maker 2024</h1>
@@ -18,8 +20,9 @@
             </div>
         </main>
         <footer>
-            <p>&copy; 2024 Todolist Inc. All rights reserved.</p>
+            <p>&copy; 2024 ToDoMaster Inc. All rights reserved.</p>
         </footer>
     </div>
+</div>
 </body>
 </html>
