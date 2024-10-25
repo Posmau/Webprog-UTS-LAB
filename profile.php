@@ -157,20 +157,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_password'])) {
             <a href="dashboard.php" class="back-btn">Kembali ke Main Page</a>
         </div>
     </div>
-
-    <script>
-        const toggleDarkModeBtn = document.getElementById('toggleDarkMode');
-        toggleDarkModeBtn.addEventListener('click', function() {
-            document.body.classList.toggle('dark-mode');
-            
-            if (document.body.classList.contains('dark-mode')) {
-                localStorage.setItem('darkMode', 'enabled');
-                toggleDarkModeBtn.textContent = 'Light Mode';
-            } else {
-                localStorage.setItem('darkMode', 'disabled');
-                toggleDarkModeBtn.textContent = 'Dark Mode';
-            }
-        });
-    </script>
 </body>
 </html>

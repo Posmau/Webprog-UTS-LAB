@@ -20,3 +20,29 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </div>
     </div>
 </nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleDarkModeBtn = document.getElementById('toggleDarkMode');
+
+        // Aktifkan dark mode jika sudah disimpan di localStorage
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            toggleDarkModeBtn.textContent = 'Light Mode';
+        } else {
+            toggleDarkModeBtn.textContent = 'Dark Mode';
+        }
+
+        // Fungsi untuk tombol toggle
+        toggleDarkModeBtn.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+                toggleDarkModeBtn.textContent = 'Light Mode';
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+                toggleDarkModeBtn.textContent = 'Dark Mode';
+            }
+        });
+    });
+</script>
