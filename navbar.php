@@ -3,6 +3,10 @@ $current_page = basename($_SERVER['PHP_SELF']);
 ?>
 <link rel="stylesheet" href="styles.css">
 <nav class="navbar">
+    <button class="navbar-toggle" onclick="toggleNavbar()">☰</button>
+
+    <div class="menu-navbar" onclick="toggleNavbar()"></div>
+
     <div class="navbar-links">
             <!-- Tombol untuk Mode Gelap -->
         <button id="toggleDarkMode">Dark Mode</button>
@@ -45,4 +49,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
             }
         });
     });
+
+    // Smaller screen menu toggle
+    function toggleNavbar() {
+        document.querySelector('.navbar').classList.toggle('active');
+    }
 </script>
