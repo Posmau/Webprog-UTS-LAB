@@ -43,6 +43,38 @@ if (!isset($_SESSION['user_id'])) {
             <p>Phone: +1 (555) 987-6543</p>
             <p>Address: 456 Productivity Avenue, Task City, TC 67890</p>
         </div>
+    <div class="about-section">
+    <h3>Our Team</h3>
+    <div class="team-container">
+        <div class="team-card">
+            <div class="team-image">
+                <img src= "img/1.jpg" alt="Alif Faiz">
+            </div>
+            <h4>Alif Nurfaiz Widyatmoko</h4>
+        </div>
+
+        <div class="team-card">
+            <div class="team-image">
+                <img src="img/2.png" alt="Max">
+            </div>
+            <h4>Maxell Nathanael</h4>
+        </div>
+
+        <div class="team-card">
+            <div class="team-image">
+                <img src="img/3.png" alt="Alfin">
+            </div>
+            <h4>Alfin Sanders</h4>
+        </div>
+
+        <div class="team-card">
+            <div class="team-image">
+                <img src="img/4.png" alt="Kevan">
+            </div>
+            <h4>Eugenius Kevan Kusuma</h4>
+            </div>
+        </div>
+    </div>
         <a href="dashboard.php" class="back-btn">Kembali ke Main Page</a>
         <!-- Tombol Scroll ke Atas -->
         <button id="scrollTopBtn" title="Kembali ke atas">
