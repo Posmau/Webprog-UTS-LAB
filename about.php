@@ -45,22 +45,5 @@ if (!isset($_SESSION['user_id'])) {
         <a href="dashboard.php" class="back-btn">Kembali ke Main Page</a>
     </div>
 </div>
-
-    <script>
-        // Fungsi untuk Mode Gelap
-        const toggleDarkModeBtn = document.getElementById('toggleDarkMode');
-            toggleDarkModeBtn.addEventListener('click', function() {
-                document.body.classList.toggle('dark-mode');
-
-            // Simpan preferensi mode di localStorage
-            if (document.body.classList.contains('dark-mode')) {
-                localStorage.setItem('darkMode', 'enabled');
-                toggleDarkModeBtn.textContent = 'Light Mode';
-            } else {
-                localStorage.setItem('darkMode', 'disabled');
-                toggleDarkModeBtn.textContent = 'Dark Mode';
-            }
-        });
-    </script>
 </body>
 </html>
